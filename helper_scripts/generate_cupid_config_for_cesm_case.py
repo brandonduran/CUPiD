@@ -20,24 +20,28 @@ CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 )
 @click.option(
     "--cupid-baseline-case",
-    default="b.e23_alpha17f.BLT1850.ne30_t232.092",
+#    default="b.e23_alpha17f.BLT1850.ne30_t232.092",
+    default=None,
     help="Base case name",
 )
 @click.option(
     "--cupid-baseline-root",
-    default="/glade/campaign/cesm/development/cross-wg/diagnostic_framework/CESM_output_for_testing",
+#    default="/glade/campaign/cesm/development/cross-wg/diagnostic_framework/CESM_output_for_testing",
+    default=None,
     help="Base case root directory",
 )
 @click.option("--cupid-startdate", default="0001-01-01", help="CUPiD case start date")
 @click.option("--cupid-enddate", default="0101-01-01", help="CUPiD case end date")
 @click.option(
     "--cupid-base-startdate",
-    default="0001-01-01",
+#    default="0001-01-01",
+    default=None,
     help="CUPiD base case start date",
 )
 @click.option(
     "--cupid-base-enddate",
-    default="0101-01-01",
+#    default="0101-01-01",
+    default=None,
     help="CUPiD base case end date",
 )
 @click.option(
@@ -170,7 +174,9 @@ def generate_cupid_config(
         ):
             # Assumption that end_year is YYYY-01-01, so we want end_year to be YYYY-1
             cupid_end_year = int(cupid_enddate.split("-")[0]) - 1
-            cupid_base_end_year = int(cupid_base_enddate.split("-")[0]) - 1
+            if cupid_base_enddate is not None:
+                cupid_base_end_year = int(cupid_base_enddate.split("-")[0]) - 1
+            else:    cupid_base_end_year = None
             my_dict["timeseries"][component]["end_years"] = [
                 cupid_end_year,
                 cupid_base_end_year,
@@ -180,7 +186,9 @@ def generate_cupid_config(
             and "start_years" in my_dict["timeseries"][component]
         ):
             cupid_start_year = int(cupid_startdate.split("-")[0])
-            cupid_base_start_year = int(cupid_base_startdate.split("-")[0])
+            if cupid_base_startdate is not None:
+                cupid_base_start_year = int(cupid_base_startdate.split("-")[0])
+            else:    cupid_base_start_year = None
             my_dict["timeseries"][component]["start_years"] = [
                 cupid_start_year,
                 cupid_base_start_year,

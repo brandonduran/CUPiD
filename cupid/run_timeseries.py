@@ -114,18 +114,24 @@ def run_timeseries(
     # general timeseries arguments for all components
     num_procs = timeseries_params["num_procs"]
 
+    #BD: check for hist_str modification
+    if hist_str != ['h0a']: #we've passed something in, using a comma-separated list
+        hist_str = hist_str.split(',')
+    else:
+        print('By default, processing tseries for only h0a history files.')
     for component, comp_bool in component_options.items():
     #BD: add correct hist_str from argument
         for hist_string in hist_str: #BD: loop through the history files
-            print("Timeseries generation for ",hist_string)
             timeseries_params[component]["hist_str"] = hist_string
             if comp_bool:
+                print("Timeseries generation for ",hist_string)
 
                 # set time series input and output directory:
                 # -----
                 if isinstance(timeseries_params["case_name"], list):
                     ts_input_dirs = []
-                    for cname in timeseries_params["case_name"]:
+#                    for cname in timeseries_params["case_name"] if cname is not None:
+                    for cname in (c for c in timeseries_params["case_name"] if c is not None):
 #                        if cname == global_params["base_case_name"] and "base_case_output_dir" in global_params:
 #                            ts_input_dirs.append(global_params["base_case_output_dir"]+"/"+cname+f"/{component}/hist/")
 #                    else:
@@ -156,7 +162,8 @@ def run_timeseries(
                 else:
                     if isinstance(timeseries_params["case_name"], list):
                         ts_output_dirs = []
-                        for cname in timeseries_params["case_name"]:
+                        #for cname in timeseries_params["case_name"]:
+                        for cname in (c for c in timeseries_params["case_name"] if c is not None):
                             ts_output_dirs.append(
                                 os.path.join(
                                         global_params["CESM_output_dir"],
@@ -174,6 +181,7 @@ def run_timeseries(
                         ]
             # -----
             # fmt: off
+            #print("."+timeseries_params[component]["hist_str"]+".")
             # pylint: disable=line-too-long
                 timeseries.create_time_series(
                     component,

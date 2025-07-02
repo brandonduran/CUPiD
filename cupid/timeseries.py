@@ -91,6 +91,12 @@ def create_time_series(
 
     # Loop over cases:
     for case_idx, case_name in enumerate(case_names):
+        print(case_name)
+        print(case_idx)
+        #BD: logic for no base case
+        if case_name is None:
+            print("Case name is None, skipping")
+            continue
         # Check if particular case should be processed:
         if ts_done[case_idx]:
             emsg = (
@@ -228,8 +234,7 @@ def create_time_series(
         list_of_commands = []
         vars_to_derive = []
         # create copy of var list that can be modified for derivable variables
-        # print(diag_var_list)
-        if diag_var_list == ["process_all"]:
+        if "process_all" == diag_var_list[0]:
             logger.info("generating time series for all variables")
             # TODO: this does not seem to be working for ocn...
             diag_var_list = hist_file_var_list
