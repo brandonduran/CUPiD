@@ -18,3 +18,5 @@ cupid.egg-info
 /docs/NCARtips.md
 /docs/Contributors.md
 /docs/runCESM.md
+
+/bd_helper_scripts/

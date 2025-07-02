@@ -11,6 +11,7 @@ import multiprocessing as mp
 import os
 import subprocess
 from pathlib import Path
+import sys
 
 import xarray as xr
 
@@ -139,7 +140,6 @@ def create_time_series(
 
         # Create ordered list of CAM history files:
         hist_files = sorted(files_list)
-
         # Open an xarray dataset from the first model history file:
         hist_file_ds = xr.open_dataset(
             hist_files[0],
@@ -228,6 +228,7 @@ def create_time_series(
         list_of_commands = []
         vars_to_derive = []
         # create copy of var list that can be modified for derivable variables
+        # print(diag_var_list)
         if diag_var_list == ["process_all"]:
             logger.info("generating time series for all variables")
             # TODO: this does not seem to be working for ocn...
