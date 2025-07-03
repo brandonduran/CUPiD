@@ -27,7 +27,7 @@ Options:
 from __future__ import annotations
 
 import os
-
+from pathlib import Path
 import click
 
 try:
@@ -124,7 +124,13 @@ def run_timeseries(
         for hist_string in hist_str: #BD: loop through the history files
             timeseries_params[component]["hist_str"] = hist_string
             if comp_bool:
-                print("Timeseries generation for ",hist_string)
+                #BD: add logic here to see if tseries files already exist
+                for cname in (c for c in timeseries_params["case_name"] if c is not None):
+                    check_path = Path(global_params["CESM_output_dir"]+"/"+cname+f"/{component}/proc/tseries/")
+                    if list(check_path.glob("*" + hist_string + ".*.nc")): 
+                        print(f'Check that timeseries don\'t already exist at {check_path}. Skipping.')
+                        continue
+                    print("Timeseries generation for ",hist_string)
 
                 # set time series input and output directory:
                 # -----
